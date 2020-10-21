@@ -3,7 +3,6 @@ package com.chadmarchand.kutna.gradle
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.tasks.testing.Test
-import java.lang.RuntimeException
 
 class KutnaGradlePlugin : Plugin<Project>{
     override fun apply(project: Project) {
@@ -20,7 +19,7 @@ class KutnaGradlePlugin : Plugin<Project>{
     }
 
     private fun configureTestTask(project: Project) {
-        val testTask = (project.task("test") as Test)
+        val testTask = (project.tasks.getByName("test") as Test)
 
         testTask.useJUnitPlatform()
         testTask.environment("USE_TEST_DB", true)

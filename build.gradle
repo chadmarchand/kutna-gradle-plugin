@@ -8,7 +8,7 @@ buildscript {
     ext {
         kutnaGradlePluginGroupId = 'com.chadmarchand.kutna'
         kutnaGradlePluginArtifactId = 'kutna-gradle-plugin'
-        kutnaGradlePluginVersion = '1.0.3'
+        kutnaGradlePluginVersion = '1.0.5'
         kutnaGradlePluginVcsRepoUrl = 'https://github.com/chadmarchand/kutna-gradle-plugin.git'
     }
 }
@@ -125,8 +125,8 @@ publishing {
 }
 
 bintray {
-    user = System.getProperty('bintray.user')
-    key = System.getProperty('bintray.key')
+    user = System.getenv('BINTRAY_USER')
+    key = System.getenv('BINTRAY_KEY')
     publications = ['mavenPublication']
     publish = true
 
