@@ -2,6 +2,13 @@ package com.chadmarchand.kutna.gradle
 
 import org.gradle.api.Project
 
+internal fun Project.addPlugin(
+    path: String,
+    version: String?
+) {
+    this.plugins.apply(path)
+}
+
 internal fun Project.addTestImplementationDependency(
     group: String,
     name: String,

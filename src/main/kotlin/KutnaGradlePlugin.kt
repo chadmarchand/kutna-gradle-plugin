@@ -5,9 +5,15 @@ import org.gradle.api.Project
 
 class KutnaGradlePlugin : Plugin<Project>{
     override fun apply(project: Project) {
+        addPlugins(project)
+
         addKotlinDependencies(project)
         addJUnitDependencies(project)
         addKoinDependencies(project)
+    }
+
+    private fun addPlugins(project: Project) {
+        project.addPlugin("org.jetbrains.kotlin.jvm", "1.3.72")
     }
 
     private fun addKotlinDependencies(project: Project) {
