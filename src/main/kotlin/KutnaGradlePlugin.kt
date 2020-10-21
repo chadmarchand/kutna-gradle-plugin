@@ -2,6 +2,8 @@ package com.chadmarchand.kutna.gradle
 
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.tasks.testing.Test
+import java.lang.RuntimeException
 
 class KutnaGradlePlugin : Plugin<Project>{
     override fun apply(project: Project) {
@@ -9,7 +11,19 @@ class KutnaGradlePlugin : Plugin<Project>{
 
         addKotlinDependencies(project)
         addJUnitDependencies(project)
+        addAssertionDependencies(project)
         addKoinDependencies(project)
+        addSerializationDependencies(project)
+        addLoggingDependencies(project)
+
+        configureTestTask(project)
+    }
+
+    private fun configureTestTask(project: Project) {
+        val testTask = (project.task("test") as Test)
+
+        testTask.useJUnitPlatform()
+        testTask.environment("USE_TEST_DB", true)
     }
 
     private fun addPlugins(project: Project) {
@@ -37,5 +51,17 @@ class KutnaGradlePlugin : Plugin<Project>{
 
         project.addTestImplementationDependency(junitGroup, "junit-jupiter-api", junitVersion)
         project.addTestRuntimeDependency(junitGroup, "junit-jupiter-engine", junitVersion)
+    }
+
+    private fun addAssertionDependencies(project: Project) {
+        project.addTestImplementationDependency("org.assertj", "assertj-core", "3.9.1")
+    }
+
+    private fun addLoggingDependencies(project: Project) {
+        project.addImplementationDependency("io.github.microutils", "kotlin-logging", "1.7.7")
+    }
+
+    private fun addSerializationDependencies(project: Project) {
+        project.addTestImplementationDependency("org.json", "json", "20180813")
     }
 }
