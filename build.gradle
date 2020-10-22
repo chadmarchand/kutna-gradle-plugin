@@ -8,7 +8,7 @@ buildscript {
     ext {
         kutnaGradlePluginGroupId = 'com.chadmarchand.kutna'
         kutnaGradlePluginArtifactId = 'kutna-gradle-plugin'
-        kutnaGradlePluginVersion = '1.0.5'
+        kutnaGradlePluginVersion = '1.0.24'
         kutnaGradlePluginVcsRepoUrl = 'https://github.com/chadmarchand/kutna-gradle-plugin.git'
     }
 }
@@ -31,7 +31,7 @@ version "$kutnaGradlePluginVersion"
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib"
 
-    compile group: 'org.jetbrains.kotlin', name: 'kotlin-gradle-plugin', version: '1.3.31'
+    compile group: 'org.jetbrains.kotlin', name: 'kotlin-gradle-plugin', version: '1.3.72'
     compile gradleApi()
 }
 

@@ -2,7 +2,10 @@ package com.chadmarchand.kutna.gradle
 
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.plugins.JavaPluginConvention
+import org.gradle.api.tasks.javadoc.Javadoc
 import org.gradle.api.tasks.testing.Test
+import org.gradle.jvm.tasks.Jar
 
 class KutnaGradlePlugin : Plugin<Project>{
     override fun apply(project: Project) {
@@ -16,6 +19,7 @@ class KutnaGradlePlugin : Plugin<Project>{
         addLoggingDependencies(project)
 
         configureTestTask(project)
+        configurePublishTask(project)
     }
 
     private fun configureTestTask(project: Project) {
@@ -26,7 +30,9 @@ class KutnaGradlePlugin : Plugin<Project>{
     }
 
     private fun addPlugins(project: Project) {
-        project.addPlugin("org.jetbrains.kotlin.jvm", "1.3.72")
+        project.plugins.apply("org.jetbrains.kotlin.jvm")
+        project.plugins.apply("maven-publish")
+        project.plugins.apply("com.jfrog.bintray")
     }
 
     private fun addKotlinDependencies(project: Project) {
@@ -62,5 +68,49 @@ class KutnaGradlePlugin : Plugin<Project>{
 
     private fun addSerializationDependencies(project: Project) {
         project.addTestImplementationDependency("org.json", "json", "20180813")
+    }
+
+    private fun configurePublishTask(project: Project) {
+        configureTestArtifacts(project)
+        configureSourcesJarTask(project)
+        configureTestJarTask(project)
+        configureJavadocJarTask(project)
+    }
+
+    private fun configureTestArtifacts(project: Project) {
+        val testCompileConfiguration = (project.configurations.getByName("testCompile"))
+        val testArtifactsConfiguration = project.configurations.create("testArtifacts")
+        testArtifactsConfiguration.extendsFrom(testCompileConfiguration)
+    }
+
+    private fun configureSourcesJarTask(project: Project) {
+        project.tasks.register("sourcesJar", Jar::class.java) {
+            (it as Jar).from(
+                project.convention.getPlugin(
+                    JavaPluginConvention::class.java
+                ).sourceSets.getByName("main").allSource
+            )
+        }
+    }
+
+    private fun configureTestJarTask(project: Project) {
+        project.tasks.register("testJar", Jar::class.java) {
+            (it as Jar).from(
+                project.convention.getPlugin(
+                    JavaPluginConvention::class.java
+                ).sourceSets.getByName("test").output
+            )
+        }
+    }
+
+    private fun configureJavadocJarTask(project: Project) {
+        val javadocTask = (project.tasks.getByName("javadoc") as Javadoc)
+        javadocTask.isFailOnError = false
+
+        project.tasks.register("javadocJar", Jar::class.java) {
+            (it as Jar).from(
+                javadocTask.destinationDir
+            )
+        }
     }
 }
