@@ -8,7 +8,7 @@ buildscript {
     ext {
         kutnaGradlePluginGroupId = 'com.chadmarchand.kutna'
         kutnaGradlePluginArtifactId = 'kutna-gradle-plugin'
-        kutnaGradlePluginVersion = '1.0.24'
+        kutnaGradlePluginVersion = '1.0.83'
         kutnaGradlePluginVcsRepoUrl = 'https://github.com/chadmarchand/kutna-gradle-plugin.git'
     }
 }

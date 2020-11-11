@@ -3,23 +3,26 @@ package com.chadmarchand.kutna.gradle
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.plugins.JavaPluginConvention
-import org.gradle.api.tasks.javadoc.Javadoc
 import org.gradle.api.tasks.testing.Test
 import org.gradle.jvm.tasks.Jar
 
-class KutnaGradlePlugin : Plugin<Project>{
+const val KUTNA_GROUP_ID = "com.chadmarchand.kutna"
+
+class KutnaPlugin : Plugin<Project>{
     override fun apply(project: Project) {
-        addPlugins(project)
+        project.apply {
+            addPlugins(project)
 
-        addKotlinDependencies(project)
-        addJUnitDependencies(project)
-        addAssertionDependencies(project)
-        addKoinDependencies(project)
-        addSerializationDependencies(project)
-        addLoggingDependencies(project)
+            addKotlinDependencies(project)
+            addJUnitDependencies(project)
+            addAssertionDependencies(project)
+            addKoinDependencies(project)
+            addSerializationDependencies(project)
+            addLoggingDependencies(project)
 
-        configureTestTask(project)
-        configurePublishTask(project)
+            configureTestTask(project)
+            configurePublishTask(project)
+        }
     }
 
     private fun configureTestTask(project: Project) {
@@ -74,7 +77,6 @@ class KutnaGradlePlugin : Plugin<Project>{
         configureTestArtifacts(project)
         configureSourcesJarTask(project)
         configureTestJarTask(project)
-        configureJavadocJarTask(project)
     }
 
     private fun configureTestArtifacts(project: Project) {
@@ -84,13 +86,16 @@ class KutnaGradlePlugin : Plugin<Project>{
     }
 
     private fun configureSourcesJarTask(project: Project) {
-        project.tasks.register("sourcesJar", Jar::class.java) {
+        project.tasks.getByName("jar") {
+            println("JarTask! ${it.dependsOn.size}")
             (it as Jar).from(
                 project.convention.getPlugin(
                     JavaPluginConvention::class.java
                 ).sourceSets.getByName("main").allSource
             )
         }
+
+        project.artifacts.add("archives", project.tasks.getByName("jar"))
     }
 
     private fun configureTestJarTask(project: Project) {
@@ -100,17 +105,9 @@ class KutnaGradlePlugin : Plugin<Project>{
                     JavaPluginConvention::class.java
                 ).sourceSets.getByName("test").output
             )
+            it.classifier = "test"
         }
-    }
 
-    private fun configureJavadocJarTask(project: Project) {
-        val javadocTask = (project.tasks.getByName("javadoc") as Javadoc)
-        javadocTask.isFailOnError = false
-
-        project.tasks.register("javadocJar", Jar::class.java) {
-            (it as Jar).from(
-                javadocTask.destinationDir
-            )
-        }
+        project.artifacts.add("testArtifacts", project.tasks.getByName("testJar"))
     }
 }
