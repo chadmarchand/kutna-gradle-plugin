@@ -87,7 +87,6 @@ class KutnaPlugin : Plugin<Project>{
 
     private fun configureSourcesJarTask(project: Project) {
         project.tasks.getByName("jar") {
-            println("JarTask! ${it.dependsOn.size}")
             (it as Jar).from(
                 project.convention.getPlugin(
                     JavaPluginConvention::class.java
