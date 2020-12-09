@@ -6,8 +6,6 @@ import org.gradle.api.plugins.JavaPluginConvention
 import org.gradle.api.tasks.testing.Test
 import org.gradle.jvm.tasks.Jar
 
-const val KUTNA_GROUP_ID = "com.chadmarchand.kutna"
-
 class KutnaPlugin : Plugin<Project>{
     override fun apply(project: Project) {
         project.apply {
@@ -22,6 +20,7 @@ class KutnaPlugin : Plugin<Project>{
 
             configureTestTask(project)
             configurePublishTask(project)
+            configureBintrayUploadTask(project)
         }
     }
 
@@ -108,5 +107,9 @@ class KutnaPlugin : Plugin<Project>{
         }
 
         project.artifacts.add("testArtifacts", project.tasks.getByName("testJar"))
+    }
+
+    private fun configureBintrayUploadTask(project: Project) {
+        project.getBintrayUploadTask().setDependsOn(mutableSetOf("configurePublishing", "jar", "testJar"))
     }
 }
