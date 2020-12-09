@@ -1,5 +1,6 @@
 # This workflow builds the project
 
+name: CI
 
 on:
   pull_request:
