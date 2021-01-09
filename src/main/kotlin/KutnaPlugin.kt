@@ -43,12 +43,10 @@ class KutnaPlugin : Plugin<Project>{
 
     private fun addKoinDependencies(project: Project) {
         val koinGroup = "org.koin"
-        val koinVersion = "2.1.6"
-        val koinJavaVersion = "2.1.0-alpha-2"
+        val koinVersion = "2.2.0"
 
         project.addImplementationDependency(koinGroup, "koin-core", koinVersion)
         project.addImplementationDependency(koinGroup, "koin-core-ext", koinVersion)
-        project.addImplementationDependency(koinGroup, "koin-java", koinJavaVersion)
         project.addTestImplementationDependency(koinGroup, "koin-test", koinVersion)
     }
 
